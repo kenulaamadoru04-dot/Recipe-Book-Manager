@@ -3,7 +3,7 @@ import re
 def name_validation(use_case, limit_number):
     while True:
         name = input(f"Enter {use_case} name: ")
-        if  not 3 < len(name) < limit_number:
+        if  not 3 < len(name) < int(limit_number):
             print("Name must be between 3 and 50 characters long")
         elif not name.strip():
             print("Name cannot be empty or contain only spaces")
@@ -82,11 +82,27 @@ def cooking_time_validation():
         except ValueError:
             print("Time must be consist of integers")
 
-print(cooking_time_validation())
+def category_selection():
+    while True:
+        category_list = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT", "SNACK", "BEVERAGES"]
+        user_input = input("Select from this category ('BREAKFAST', 'LUNCH', 'DINNER', 'DESSERT', 'SNACK', 'BEVERAGES') ")
+        for category in category_list:
+            if user_input == category.lower() or user_input == category.title():
+                print("Category is case sensitive")
+            elif user_input in category_list:
+                return category
+            else:
+                print("Invalid category")
 
+def recipe_validation():
+    name = name_validation("recipe", "50")
+    ingredients = input_ingredient()
+    cooking_time = cooking_time_validation()
+    category = category_selection()
+    print(f"""Recipe Validated Successfully
+          Name: {name}
+          Ingredients: len{ingredients}
+          Category: {category}
+          Cooking Time: {cooking_time}""")
 
-
-
-
-
-
+recipe_validation()
