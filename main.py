@@ -36,7 +36,6 @@ def unit_validation():
         else:
             return unit
 
-
 def input_ingredient():
     ingredient_list = []
     name_list = []
@@ -62,8 +61,28 @@ def input_ingredient():
         name_list.append(ingredient_name)
 
 
+def cooking_time_validation():
+    while True:
+        try:
+            hours = int(input("Enter the cooking time in hours: "))
+            minutes = int(input("Enter the cooking time in minutes: "))
+            if (hours >= 0 and minutes <= 5) or (hours >= 12 and minutes > 0 ):
+                print("Cooking time must be between 00.05 and 12.00 hours")
+            elif hours < 0 or hours > 24 or minutes < 0 or minutes > 59:
+                print("Enter a valid cooking time")
+            else:
+                if hours < 10 and minutes < 10:
+                    return f"0{hours}:0{minutes}"
+                elif hours < 10:
+                    return f"0{hours}:{minutes}"
+                elif minutes < 10:
+                    return f"{hours}:0{minutes}"
+                else:
+                    return f"{hours}:{minutes}"
+        except ValueError:
+            print("Time must be consist of integers")
 
-
+print(cooking_time_validation())
 
 
 
