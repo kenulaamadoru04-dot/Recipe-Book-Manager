@@ -14,8 +14,7 @@ def name_validation(use_case, limit_number):
 
 def validate_ingredient_name():
     while True:
-        name_validation("ingredient", 30)
-
+        return name_validation("ingredient", 30)
 
 def validate_ingredient_quantity():
     while True:
@@ -42,21 +41,26 @@ def input_ingredient():
     ingredient_list = []
     name_list = []
     while True:
-        print("If you would like to continue, please enter the ingredient else enter finished")
+        print("If you would like to continue, please enter the ingredient else enter finish")
         ingredient_name = validate_ingredient_name()
-        if ingredient_name == "finished":
-            if not 3 <ingredient_list < 20:
+        if ingredient_name == "finish":
+            if not 3 < len(ingredient_list) < 20:
                 print("Recipe should include 3 to 20 ingredients")
-                return False
+                continue
+            else:
+                return ingredient_list
         elif ingredient_name in name_list:
             confirmation = input(f"Ingredient {ingredient_name} already exists, would you like to overwrite it? [y/n]")
             if confirmation == "y":
-                ingredient_quantity = validate_ingredient_quantity()
-                ingredient_unit = unit_validation()
-                ingredient_tuple = (ingredient_name, ingredient_quantity, ingredient_unit)
-                ingredient_list.append(ingredient_tuple)
+                pass
             elif confirmation == "n":
-                input_ingredient()
+                continue
+        ingredient_quantity = validate_ingredient_quantity()
+        ingredient_unit = unit_validation()
+        ingredient_tuple = (ingredient_name, ingredient_quantity, ingredient_unit)
+        ingredient_list.append(ingredient_tuple)
+        name_list.append(ingredient_name)
+
 
 
 
