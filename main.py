@@ -42,21 +42,17 @@ def input_ingredient():
     while True:
         print("If you would like to continue, please enter the ingredient else enter finish")
         ingredient_name = validate_ingredient_name()
+
         if ingredient_name == "finish":
-            if not 3 < len(ingredient_list) < 20:
-                print("Recipe should include 3 to 20 ingredients")
-                continue
-            else:
+            if 3 < len(ingredient_list) < 20:
                 return ingredient_list
-        elif ingredient_name in name_list:
-            confirmation = input(f"Ingredient {ingredient_name} already exists, would you like to overwrite it? [y/n]")
-            if confirmation == "y":
-                pass
-            elif confirmation == "n":
+            print("Recipe should include 3 to 20 ingredients")
+            continue
+
+        if ingredient_name in name_list:
+            if input(f"Ingredient {ingredient_name} already exists, would you like to overwrite it? [y/n]").lower() != "y":
                 continue
-        ingredient_quantity = validate_ingredient_quantity()
-        ingredient_unit = unit_validation()
-        ingredient_tuple = (ingredient_name, ingredient_quantity, ingredient_unit)
+        ingredient_tuple = (ingredient_name, validate_ingredient_quantity(), unit_validation())
         ingredient_list.append(ingredient_tuple)
         name_list.append(ingredient_name)
 
@@ -66,19 +62,12 @@ def cooking_time_validation():
         try:
             hours = int(input("Enter the cooking time in hours: "))
             minutes = int(input("Enter the cooking time in minutes: "))
-            if (hours >= 0 and minutes <= 5) or (hours >= 12 and minutes > 0 ):
+            if (hours == 0 and minutes <= 5) or (hours >= 12 and minutes > 0 ):
                 print("Cooking time must be between 00.05 and 12.00 hours")
             elif hours < 0 or hours > 24 or minutes < 0 or minutes > 59:
                 print("Enter a valid cooking time")
             else:
-                if hours < 10 and minutes < 10:
-                    return f"0{hours}:0{minutes}"
-                elif hours < 10:
-                    return f"0{hours}:{minutes}"
-                elif minutes < 10:
-                    return f"{hours}:0{minutes}"
-                else:
-                    return f"{hours}:{minutes}"
+                return f"{hours:02}:{minutes:02}"
         except ValueError:
             print("Time must be consist of integers")
 
@@ -86,6 +75,7 @@ def category_selection():
     while True:
         category_list = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT", "SNACK", "BEVERAGES"]
         user_input = input("Select from this category ('BREAKFAST', 'LUNCH', 'DINNER', 'DESSERT', 'SNACK', 'BEVERAGES') ")
+
         for category in category_list:
             if user_input == category.lower() or user_input == category.title():
                 print("Category is case sensitive")
@@ -95,6 +85,7 @@ def category_selection():
                 print("Invalid category")
 
 def recipe_validation():
+
     name = name_validation("recipe", "50")
     ingredients = input_ingredient()
     cooking_time = cooking_time_validation()
@@ -105,4 +96,14 @@ def recipe_validation():
           Category: {category}
           Cooking Time: {cooking_time}""")
 
-recipe_validation()
+def generate_recipe_id(recipes):
+    counter = 1
+    while True:
+        recipe_id = f"RCP{counter:03d}"
+        if recipe_id not in recipes:
+            return recipe_id
+        counter += 1
+
+
+
+
