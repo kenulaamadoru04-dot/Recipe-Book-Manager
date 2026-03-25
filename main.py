@@ -1,6 +1,6 @@
 import re
 
-from pandas.core.dtypes.inference import is_integer
+
 
 
 def name_validation(use_case, limit_number):
@@ -79,15 +79,12 @@ def cooking_time_validation():
 def category_selection():
     while True:
         category_list = ["BREAKFAST", "LUNCH", "DINNER", "DESSERT", "SNACK", "BEVERAGES"]
-        user_input = input("Select from this category ('BREAKFAST', 'LUNCH', 'DINNER', 'DESSERT', 'SNACK', 'BEVERAGES') ")
+        user_input = input("Select from this category ('BREAKFAST', 'LUNCH', 'DINNER', 'DESSERT', 'SNACK', 'BEVERAGES') ").upper()
 
-        for category in category_list:
-            if user_input == category.lower() or user_input == category.title():
-                print("Category is case sensitive")
-            elif user_input in category_list:
-                return category
-            else:
-                print("Invalid category")
+        if user_input in category_list:
+            return user_input
+        else:
+            print("Invalid category")
 
 def recipe_validation():
 
@@ -110,14 +107,6 @@ def generate_recipe_id(recipes):
             return recipe_id
         counter += 1
 
-recipe = {{'RCP001': {'name': 'Pizza',
-                      'ingredients': [('flour', 500, 'g'), ('chicken', 250, 'g'), ('carrots', 4, 'piece'), ('milk', 50, 'ml')],
-                      'time': '00:30',
-                      'category': 'BREAKFAST'},
-           'RCP002': {'name': 'Rice',
-                      'ingredients': [('rice', 500, 'g'), ('salt', 5, 'g'), ('water', 1, 'l'), ('rampe', 1, 'piece')],
-                      'time': '01:00',
-                      'category': 'BREAKFAST'}}}
 def multiple_recipe_entry(recipes):
     number_of_recipies_added = 0
     while True:
@@ -130,10 +119,75 @@ def multiple_recipe_entry(recipes):
         else:
             continue
 
+recipe = {'RCP001': {'name': 'Pizza',
+                     'ingredients': [('flour', 500, 'g'), ('chicken', 250, 'g'), ('carrots', 4, 'piece'), ('milk', 50, 'ml')],
+                     'time': '00:30',
+                     'category': 'BREAKFAST'},
+          'RCP002': {'name': 'Rice',
+                     'ingredients': [('rice', 500, 'g'), ('salt', 5, 'g'), ('water', 1, 'l'), ('rampe', 1, 'piece')],
+                     'time': '01:00',
+                     'category': 'BREAKFAST'},
+          'RCP003': {'name': 'Cake',
+                     'ingredients': [('flour', 1, 'kg'), ('eggs', 5, 'piece'), ('butter', 1, 'kg'), ('sugar', 2, 'kg')],
+                     'time': '05:00',
+                     'category': 'DESSERT'},
+          'RCP004': {'name': 'Pudding',
+                     'ingredients': [('flour', 500, 'g'), ('honey', 500, 'ml'), ('eggs', 4, 'piece'), ('nuts', 5, 'g')],
+                     'time': '02:45',
+                     'category': 'DESSERT'},}
+
+def single_recipe_display(recipes):
+    try:
+        check_in = int(input("What recipe would you like to check? RCP"))
+        check_in = f"RCP{check_in:03d}"
 
 
+        print(f"""
+===================================================================
+Recipe ID: {check_in}
+Name: {recipes[check_in]["name"]}
+Category: {recipes[check_in]["category"]}
+Cooking Time: {recipes[check_in]["time"]}
+------------------------------------------------------------------- 
+Ingredients:""")
+        for number, item in enumerate(recipes[check_in]["ingredients"], 1):
+            ingredient, quantity, unit = item
+            print(f"  {number}. {ingredient} - {quantity}{unit}")
+        print(f"""
+-------------------------------------------------------------------
+Tags: 
+===================================================================
+        """.strip())
+    except ValueError:
+        print("Invalid input. Enter recipe number")
+
+    except KeyError:
+        print("Invalid input. Recipe number not found.")
+
+def display_recipes(recipes):
+
+    print(f"Total Recipies: {len(recipes)}")
+    print("---------------------------------------")
+    for recipe_id, data in recipes.items():
+        print(f"{recipe_id}|{data['name']}|{data['category']}|{data['time']}")
+    print("---------------------------------------")
 
 
+def display_by_category(recipes):
+    count = 0
+    while True:
+        user_prompt = input("Which category would you like to display? ").upper()
+        for recipe_id, data in recipes.items():
+            if data['category'] == user_prompt:
+                print(f"{recipe_id}|{data['name']}|{data['time']}")
+                count += 1
+            else:
+                print("Invalid input. Recipe category not found.")
+                continue
+        print(f"Found {count} {user_prompt} recipes")
+        return False
+
+multiple_recipe_entry(recipe)
 
 
 
