@@ -1,5 +1,8 @@
 import re
 
+from pandas.core.dtypes.inference import is_integer
+
+
 def name_validation(use_case, limit_number):
     while True:
         name = input(f"Enter {use_case} name: ")
@@ -25,6 +28,8 @@ def validate_ingredient_quantity():
         except ValueError:
             print("Ingredient quantity must be an integer")
         else:
+            if quantity.is_integer():
+                quantity = int(quantity)
             return quantity
 
 def unit_validation():
@@ -95,6 +100,7 @@ def recipe_validation():
           Ingredients: len{ingredients}
           Category: {category}
           Cooking Time: {cooking_time}""")
+    return name, ingredients, cooking_time, category
 
 def generate_recipe_id(recipes):
     counter = 1
@@ -103,6 +109,30 @@ def generate_recipe_id(recipes):
         if recipe_id not in recipes:
             return recipe_id
         counter += 1
+
+recipe = {{'RCP001': {'name': 'Pizza',
+                      'ingredients': [('flour', 500, 'g'), ('chicken', 250, 'g'), ('carrots', 4, 'piece'), ('milk', 50, 'ml')],
+                      'time': '00:30',
+                      'category': 'BREAKFAST'},
+           'RCP002': {'name': 'Rice',
+                      'ingredients': [('rice', 500, 'g'), ('salt', 5, 'g'), ('water', 1, 'l'), ('rampe', 1, 'piece')],
+                      'time': '01:00',
+                      'category': 'BREAKFAST'}}}
+def multiple_recipe_entry(recipes):
+    number_of_recipies_added = 0
+    while True:
+        recipe_id = generate_recipe_id(recipes)
+        name, ingredients, cooking_time, category = recipe_validation()
+        recipes[recipe_id] = {"name": name, "ingredients": ingredients, "time": cooking_time, "category": category}
+        number_of_recipies_added += 1
+        if input("Would you like to add another recipe? [y/n]: ") == "n":
+            return recipes
+        else:
+            continue
+
+
+
+
 
 
 
